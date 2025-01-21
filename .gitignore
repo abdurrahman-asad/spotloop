@@ -21,3 +21,12 @@
 # compiled
 chrome-extension/public/manifest.json
 **/tailwind-output.css
+
+# Python/Django
+**/__pycache__
+**/*.pyc
+**/db.sqlite3
+**/venv
+**/.pytest_cache
+**/staticfiles
+**/media

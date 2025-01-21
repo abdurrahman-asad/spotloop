@@ -1,0 +1,14 @@
+{
+  "name": "backend",
+  "version": "0.3.5",
+  "private": true,
+  "scripts": {
+    "clean:venv": "rimraf .venv",
+    "clean:node_modules": "rimraf node_modules",
+    "clean:turbo": "rimraf .turbo",
+    "clean": "pnpm clean:venv && pnpm clean:turbo && pnpm clean:node_modules",
+    "dev": "venv/bin/python manage.py runserver",
+    "migrate": "venv/bin/python manage.py migrate",
+    "makemigrations": "venv/bin/python manage.py makemigrations"
+  }
+}

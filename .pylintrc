@@ -1,0 +1,31 @@
+[MASTER]
+load-plugins=pylint_django
+django-settings-module=dap.settings
+
+[MESSAGES CONTROL]
+disable=C0111,  # missing-docstring
+        C0114,  # missing-module-docstring
+        C0115,  # missing-class-docstring
+        C0116,  # missing-function-docstring
+        R0903,  # too-few-public-methods
+        R0901,  # too-many-ancestors
+        no-member,  # Fixes Django model errors
+        invalid-name,
+        too-many-arguments,
+        attribute-defined-outside-init,
+        duplicate-code
+
+[FORMAT]
+max-line-length=100
+
+[DESIGN]
+max-parents=13
+
+[TYPECHECK]
+generated-members=REQUEST,acl_users,aq_parent,"[a-zA-Z]+_set{1,2}",save,delete
+
+[SIMILARITIES]
+min-similarity-lines=4
+ignore-comments=yes
+ignore-docstrings=yes
+ignore-imports=no 
