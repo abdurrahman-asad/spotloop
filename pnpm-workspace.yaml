@@ -1,6 +1,4 @@
 packages:
-  - "chrome-extension"
-  - "backend"
-  - "pages/*"
-  - "packages/*"
-  - "tests/*"
+  - 'backend'
+  - 'frontend/extension'
+  - 'frontend/packages/**'
