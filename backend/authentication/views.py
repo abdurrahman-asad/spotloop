@@ -1,6 +1,6 @@
 from authentication.models import User
 
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -14,9 +14,6 @@ def get_custom_token(user, data):
     token["firstname"] = data.get("first_name", "")
     token["lastname"] = data.get("last_name", "")
     token["email"] = data["email"]
-    token["is_teacher"] = user.is_teacher
-    token["is_admin"] = user.is_admin
-    token["institution_id"] = str(user.institution_id)
     return str(token.access_token), str(token)
 
 
@@ -52,18 +49,6 @@ class UserView(BaseViewSet):
         if self.action == "create":
             return [IsAdmin()]
         return super().get_permissions()
-
-    # def create(self, request, *args, **kwargs):
-    #     serializer = UserWritableSerializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     user = serializer.save()
-    #     return Response(
-    #         {
-    #             **serializer.data,
-    #             "access": access,
-    #             "refresh": refresh,
-    #         }
-    #     )
 
     def update(self, request, *args, **kwargs):
         user = self.get_object()

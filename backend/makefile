@@ -1,4 +1,4 @@
-.PHONY: help oneshot venv install migrate clean create-env makemigrations
+.PHONY: help oneshot venv install migrate clean create-env makemigrations superuser start
 
 PYTHON = python3
 VENV_NAME = venv
@@ -16,8 +16,10 @@ help:
 	@echo "make clean     - Remove virtual environment and cached files"
 	@echo "make activate-venv - Activate virtual environment"
 	@echo "make create-env - Create base .env file"
+	@echo "make superuser - Create a Django superuser"
+	@echo "make start     - Start development server"
 
-oneshot: create-env venv install migrate
+oneshot: create-env venv install migrate superuser
 	@echo "✨ Setup complete!"
 
 create-env:
@@ -43,6 +45,10 @@ install:
 	@$(VENV_PYTHON) -m pip install -r requirements.txt
 	@echo "Done!"
 
+start:
+	@echo "Starting development server..."
+	@$(VENV_PYTHON) manage.py runserver
+
 migrate:
 	@echo "Running migrations..."
 	@$(VENV_PYTHON) manage.py migrate
@@ -59,3 +65,10 @@ clean:
 	@find . -type d -name "__pycache__" -exec rm -rf {} +
 	@find . -type f -name "*.pyc" -delete
 	@echo "Done!"
+
+superuser:
+	@echo "Setting up admin user with company and team..."
+	@$(VENV_PYTHON) manage.py setup_admin
+	@echo "Admin created with:"
+	@echo "Username: admin"
+	@echo "Password: admin"

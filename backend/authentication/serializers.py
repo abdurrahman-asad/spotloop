@@ -20,14 +20,11 @@ class UserWritableSerializer(serializers.ModelSerializer):
             "password",
             "first_name",
             "last_name",
-            "is_teacher",
         )
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
         user = self.context["request"].user
-        validated_data["institution_id"] = user.institution_id
-        validated_data["is_teacher"] = True
         validated_data["created_by"] = user
         user = User.objects.create_user(**validated_data)
         return user
@@ -35,7 +32,6 @@ class UserWritableSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         user = self.context["request"].user
         validated_data["updated_by"] = user
-        validated_data["updated_on"] = timezone.now()
         for field, value in validated_data.items():
             if field != "password":
                 setattr(instance, field, value)
@@ -49,8 +45,6 @@ class UserWritableSerializer(serializers.ModelSerializer):
 
 
 class UserReadOnlySerializer(serializers.ModelSerializer):
-    # institution = InstitutionSerializer()
-
     class Meta:
         model = User
         fields = (
@@ -58,19 +52,8 @@ class UserReadOnlySerializer(serializers.ModelSerializer):
             "email",
             "first_name",
             "last_name",
-            "is_teacher",
-            "is_admin",
-            "institution",
         )
-        read_only_fields = (
-            "username",
-            "email",
-            "first_name",
-            "last_name",
-            "is_teacher",
-            "is_admin",
-            "institution",
-        )
+        read_only_fields = fields
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -92,9 +75,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["firstname"] = user.first_name
         token["lastname"] = user.last_name
         token["email"] = user.email
-        token["is_teacher"] = user.is_teacher
-        token["is_admin"] = user.is_admin
-        token["institution_id"] = str(user.institution_id)
         return token
 
 
