@@ -12,7 +12,9 @@
   "dependencies": {
     "extension": "workspace:^",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "shared": "workspace:*",
+    "ui": "workspace:*"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "2.0.0-beta.30",
