@@ -9,16 +9,13 @@
     },
     "dev": {
       "dependsOn": ["ready"],
-      "outputs": ["dist/**", "build/**", "i18n/locales/**"],
+      "outputs": ["dist/**", "build/**"],
       "cache": false,
       "persistent": true
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["../../dist/**", "dist/**", "build/**"],
-      "cache": false
-    },
-    "e2e": {
+      "outputs": ["dist/**", "build/**"],
       "cache": false
     },
     "type-check": {
