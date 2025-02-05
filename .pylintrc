@@ -1,6 +1,6 @@
 [MASTER]
 load-plugins=pylint_django
-django-settings-module=dap.settings
+django-settings-module=steerbit.settings
 
 [MESSAGES CONTROL]
 disable=C0111,  # missing-docstring
