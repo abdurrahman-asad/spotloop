@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./css-config": "./index.css"
   },
   "scripts": {
     "clean:node_modules": "pnpx rimraf node_modules",
