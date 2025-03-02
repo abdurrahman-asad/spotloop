@@ -9,3 +9,4 @@ export const subtract = (a: number, b: number) => {
 };
 
 export { Demo } from './Demo';
+export { Button } from '@ui/components/ui/button';

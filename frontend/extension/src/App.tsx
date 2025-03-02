@@ -2,7 +2,7 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
-import { sum, subtract, Demo } from 'ui';
+import { sum, subtract, Demo, Button } from 'ui';
 // import { envVar } from 'shared';
 
 function App() {
@@ -19,6 +19,7 @@ function App() {
         </a>
       </div>
       <h1>{<Demo />}</h1>
+      <Button variant="destructive"> Test Shadcn </Button>
       <div className="card">
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
