@@ -1,12 +1,21 @@
 {
   "manifest_version": 3,
-  "name": "CRXJS React Vite Example",
+  "name": "Steerbit",
   "version": "1.0.0",
-  "action": { "default_popup": "index.html" },
+  "minimum_chrome_version": "114",
+  "description": "We steer you through every bit of the process.",
+  "action": { "default_title": "Steerbit" },
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "background": {
+    "service_worker": "sw.ts"
+  },
   "content_scripts": [
     {
       "js": ["src/content.ts"],
       "matches": ["https://www.google.com/*"]
     }
-  ]
+  ],
+  "permissions": ["sidePanel"]
 }

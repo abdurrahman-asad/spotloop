@@ -7,7 +7,7 @@
     "clean:node_modules": "pnpx rimraf node_modules",
     "clean:bundle": "rimraf dist",
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && rimraf build/.vite",
     "lint": "eslint .",
     "preview": "vite preview",
     "lint:fix": "pnpm lint --fix",
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.4",
+    "react-router": "^7.3.0",
     "shared": "workspace:*",
     "ui": "workspace:*"
   },
