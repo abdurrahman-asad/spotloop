@@ -1,6 +1,6 @@
 [MASTER]
 load-plugins=pylint_django
-django-settings-module=steerbit.settings
+django-settings-module=spotloop.settings
 
 [MESSAGES CONTROL]
 disable=C0111,  # missing-docstring

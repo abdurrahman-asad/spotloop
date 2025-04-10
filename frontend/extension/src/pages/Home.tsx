@@ -10,7 +10,7 @@ export const Home = () => {
         <Outlet />
       </div>
       {/* <div className="flex flex-col items-center justify-center grow-1">
-        <h1 className="text-2xl">Welcome to Steerbit</h1>
+        <h1 className="text-2xl">Welcome to Spotloop</h1>
         <p className="font-light">What should I steer you through?</p>
         <Input className="mt-4 rounded-2xl" />
       </div> */}

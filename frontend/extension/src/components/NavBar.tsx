@@ -49,7 +49,7 @@ export function ModeToggle() {
 export const NavBar = () => {
   return (
     <div className="flex justify-between">
-      <p className="text-2xl">Steerbit</p>
+      <p className="text-2xl">Spotloop</p>
       <ModeToggle />
       <Menu />
     </div>
