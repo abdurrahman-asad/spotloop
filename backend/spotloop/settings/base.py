@@ -1,5 +1,5 @@
 """
-Django settings for steerbit.
+Django settings for spotloop.
 """
 
 import os
@@ -42,7 +42,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "steerbit.urls"
+ROOT_URLCONF = "spotloop.urls"
 
 TEMPLATES = [
     {
@@ -60,7 +60,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "steerbit.wsgi.application"
+WSGI_APPLICATION = "spotloop.wsgi.application"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
