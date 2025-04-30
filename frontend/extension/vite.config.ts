@@ -5,16 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 import manifest from './manifest.json';
 
 export default defineConfig(({ mode }) => {
-  // add host_permissions to allow vite to connect to the dev server
-  let hostPermissions = {};
-  if (mode === 'development') {
-    hostPermissions = {
-      host_permissions: ['http://localhost:5173/*'],
-    };
-  }
-
   return {
-    plugins: [react(), crx({ manifest: { ...manifest, ...hostPermissions } }), tailwindcss()],
+    plugins: [react(), crx({ manifest }), tailwindcss()],
     envDir: '../',
     // This is required for the extension to work in dev mode, vite adds token checking to
     // websocket connections by default, which crx does not support.
@@ -24,9 +16,9 @@ export default defineConfig(({ mode }) => {
     build: {
       rollupOptions: {
         output: {
-          entryFileNames: 'assets/[hash].js', // Fully hashed entry files
-          chunkFileNames: 'assets/[hash].js', // Fully hashed chunk files
-          assetFileNames: 'assets/[hash].[ext]', // Fully hashed assets (CSS, images, etc.)
+          entryFileNames: 'assets/[hash].js',
+          chunkFileNames: 'assets/[hash].js',
+          assetFileNames: 'assets/[hash].[ext]',
         },
       },
       outDir: mode === 'production' ? 'build' : 'dist', // 'build' for production, 'dist' for dev

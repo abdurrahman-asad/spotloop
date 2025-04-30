@@ -86,6 +86,8 @@ export default [
       'import/no-unresolved': 'off',
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
+      'no-trailing-spaces': 'error',
+      '@typescript-eslint/no-unused-expressions': 'off',
     },
   },
 ];

@@ -1,0 +1,1 @@
+export { useIsPageUnsupported } from './useIsPageUnsupported';

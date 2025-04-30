@@ -4,18 +4,34 @@
   "version": "1.0.0",
   "minimum_chrome_version": "114",
   "description": "Drop a spot. Loop in your team.",
+  "icons": {
+    "16": "public/logo.png",
+    "32": "public/logo.png",
+    "48": "public/logo.png",
+    "128": "public/logo.png"
+  },
   "action": { "default_title": "Spotloop" },
   "side_panel": {
     "default_path": "index.html"
   },
   "background": {
-    "service_worker": "sw.ts"
+    "service_worker": "src/service-worker/index.ts"
   },
-  "content_scripts": [
+  "host_permissions": ["https://*/*", "http://*/*"],
+  "web_accessible_resources": [
     {
-      "js": ["src/content.ts"],
-      "matches": ["https://www.google.com/*"]
+      "resources": ["assets/*.css", "src/assets/*.png"],
+      "matches": ["<all_urls>"]
     }
   ],
-  "permissions": ["sidePanel"]
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "notifications",
+    "scripting",
+    "sidePanel",
+    "storage",
+    "tabs",
+    "webNavigation"
+  ]
 }
