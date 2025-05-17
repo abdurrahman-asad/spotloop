@@ -1,7 +1,7 @@
 {
   "name": "spotloop",
   "version": "0.0.0",
-  "description": "Steer every bit of the process",
+  "description": "Drop a spot. Loop in your team.",
   "type": "module",
   "scripts": {
     "clean:bundle": "turbo clean:bundle",

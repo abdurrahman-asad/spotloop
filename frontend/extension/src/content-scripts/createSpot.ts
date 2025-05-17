@@ -1,6 +1,9 @@
-import { BLOCKED_EVENTS, PRIMARY_COLOR } from './constants';
+import { emitStopDOMCapture_px } from '../messaging/proxies';
+import { startDOMCapture, stopDOMCapture } from '../messaging/signals';
+import { BLOCKED_EVENTS, HOVER_DEBOUNCE_DELAY, PRIMARY_COLOR } from './constants';
 import { blockEvents, debounce } from './utils';
 
+let isCaptureActive = false;
 let highlight: HTMLDivElement;
 let lastElement: HTMLElement | null = null;
 const shadowHostsToClear = new Set<HTMLElement>();
@@ -55,7 +58,7 @@ const handleHover = (e: Event) => {
   }
 };
 
-const onHover = debounce((e: Event) => handleHover(e), 40);
+const onHover = debounce((e: Event) => handleHover(e), HOVER_DEBOUNCE_DELAY);
 
 const onShadowDomHoverOut = (e: Event) => {
   const target = e.target as HTMLElement | null;
@@ -74,7 +77,7 @@ const removeAllListeners = () => {
   });
 
   document.removeEventListener('mouseover', onHover);
-  document.removeEventListener('mouseleave', iframeMouseLeave);
+  document.removeEventListener('mouseleave', onIframeMouseLeave);
 
   shadowHostsToClear.forEach(host => {
     host.shadowRoot?.removeEventListener('mouseover', handleHover);
@@ -83,15 +86,25 @@ const removeAllListeners = () => {
   shadowHostsToClear.clear();
 };
 
-const onClick = (e: Event) => {
-  blockEvents(e);
+const cleanUp = () => {
+  isCaptureActive = false;
+  highlight.remove();
+  highlight = null as any;
+  lastElement = null;
   removeAllListeners();
 };
 
-const iframeMouseLeave = debounce(hideHighlight, 40);
+const onClick = (e: Event) => {
+  blockEvents(e);
+  // stop capturing in call the contexts
+  emitStopDOMCapture_px();
+};
+
+const onIframeMouseLeave = debounce(hideHighlight, HOVER_DEBOUNCE_DELAY);
 
 // entery point for the script
-function startDOMCapture() {
+function startCapture() {
+  isCaptureActive = true;
   highlight = injectHighlight();
 
   BLOCKED_EVENTS.forEach(evt => {
@@ -109,8 +122,19 @@ function startDOMCapture() {
   document.addEventListener('mouseover', onHover);
 
   if (window !== window.parent) {
-    document.addEventListener('mouseleave', iframeMouseLeave);
+    document.addEventListener('mouseleave', onIframeMouseLeave);
   }
 }
 
-startDOMCapture();
+startCapture();
+
+// Listen for the stop signal from the background script
+stopDOMCapture.subscribe(() => {
+  cleanUp();
+});
+
+startDOMCapture.subscribe(() => {
+  if (!isCaptureActive) {
+    startCapture();
+  }
+});

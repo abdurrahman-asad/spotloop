@@ -6,4 +6,8 @@ import { createSignal } from './utils/signalFactory';
   DON'T FORGET TO UNSUBSCRIBE THE SIGNALS IN THE CONTENT SCRIPTS
 */
 
-export const testingSignal = createSignal<string>('testing');
+export const stopDOMCapture = createSignal('STOP_DOM_CAPTURE');
+
+export const startDOMCapture = createSignal('START_DOM_CAPTURE');
+
+export const pingDOMCaptureScript = createSignal('PING_DOM_CAPTURE_SCRIPT');
