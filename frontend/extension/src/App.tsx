@@ -1,11 +1,7 @@
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { Layout } from './pages/Layout';
-import { Login } from './pages/Login';
-import { Settings } from './pages/Settings';
 import { ThemeProvider } from 'ui';
-import { Home } from './pages/Home';
-import { Unavailable } from './pages/Unavailable';
 import { useIsPageUnsupported } from './utils/hooks';
+import { Home, CreateAutomation, Layout, Login, Settings, Unavailable } from './pages';
 
 function App() {
   const { isPageUnsupported, loading } = useIsPageUnsupported();
@@ -22,6 +18,7 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route path="/" element={<Home />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="create-automation" element={<CreateAutomation />} />
             </Route>
             <Route path="login" element={<Login />} />
           </Routes>
