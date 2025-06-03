@@ -23,5 +23,9 @@ export default defineConfig(({ mode }) => {
       },
       outDir: mode === 'production' ? 'build' : 'dist', // 'build' for production, 'dist' for dev
     },
+    server: {
+      port: 3000,
+      strictPort: true,
+    },
   };
 });

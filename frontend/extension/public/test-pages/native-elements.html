@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Native Elements</title>
+  </head>
+  <body>
+    <h2> Test programmatic interactions on native elements</h2>
+    <div>
+      <select id="select" name="select">
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+        <option value="3">Option 3</option>
+      </select>
+    </div>
+    <br />
+
+    <div>
+      <button
+        id="button"
+        name="button"
+        onclick="((event) => { console.log(event.isTrusted)})(event)"
+        >Button</button
+      >
+    </div>
+    <br />
+
+    <div>
+      <label for="text">Text</label>
+      <input
+        id="text"
+        type="text"
+        name="text"
+        onchange="((event) => { console.log(event.target.value)})(event)"
+        oninput="((event) => { console.log(event.target.value)})(event)" />
+    </div>
+    <br />
+
+    <div>
+      <label for="radio">Radio</label>
+      <input id="radio" type="radio" name="radio" />
+    </div>
+    <br />
+
+    <div>
+      <label for="checkbox">Checkbox</label>
+      <input id="checkbox" type="checkbox" name="checkbox" />
+    </div>
+    <br />
+
+    <div>
+      <label for="date">Date</label>
+      <input id="date" type="date" name="date" />
+    </div>
+    <br />
+
+    <div>
+      <label for="time">Time</label>
+      <input id="time" type="time" name="time" />
+    </div>
+    <br />
+
+    <div>
+      <label for="range">Range</label>
+      <input id="range" type="range" name="range" />
+    </div>
+    <br />
+
+    <div>
+      <label for="week">Week</label>
+      <input id="week" type="week" name="week" />
+    </div>
+    <br />
+
+    <div>
+      <label for="month">Month</label>
+      <input id="month" type="month" name="month" />
+    </div>
+    <br />
+
+    <div>
+      <label for="file">File</label>
+      <input id="file" type="file" name="file" />
+    </div>
+    <br />
+
+    <div>
+      <label for="color">Color</label>
+      <input id="color" type="color" name="color" />
+    </div>
+    <br />
+
+    <p> Radio, checkbox and button can be clicked. </p>
+    <p>
+      Directly set values for the rest and dispatch the "input/change" events to update the
+      underlying state.
+    </p>
+  </body>
+</html>

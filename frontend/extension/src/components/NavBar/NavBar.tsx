@@ -5,10 +5,10 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from 'ui';
-import { TbArrowBackUp, TbMapPinFilled, TbMenu3 } from 'react-icons/tb';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { TbMenu3, TbRoute } from 'react-icons/tb';
+import { Link } from 'react-router';
 import { ThemeToggle } from '../ThemeToggle';
-import { onCreateSpot } from './menuActions';
+// import { onCreateSpot } from './menuActions';
 
 function Menu() {
   return (
@@ -19,12 +19,14 @@ function Menu() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="*:cursor-pointer **:text-[1rem]" align="end">
-        <DropdownMenuItem onClick={onCreateSpot}>
-          <TbMapPinFilled /> Create spot
-        </DropdownMenuItem>
+        <Link to="/create-automation">
+          <DropdownMenuItem className="cursor-pointer">
+            <TbRoute className="text-foreground" /> Create automation
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuItem>Overview</DropdownMenuItem>
         <Link to="/settings">
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
         </Link>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -32,22 +34,16 @@ function Menu() {
 }
 
 export const NavBar = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
   return (
     <div>
       <div className="flex justify-between">
-        <p className="text-2xl">Spotloop</p>
+        {/* TODO: Add logo here */}
+        <p className="text-2xl"></p>
         <div className="flex gap-2">
           <ThemeToggle />
           <Menu />
         </div>
       </div>
-      {location.pathname !== '/' && (
-        <div className="my-3">
-          <TbArrowBackUp className="!h-5 !w-5 cursor-pointer" onClick={() => navigate(-1)} />
-        </div>
-      )}
     </div>
   );
 };
