@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { ThemeProvider } from 'ui';
 import { useIsPageUnsupported } from './utils/hooks';
@@ -5,6 +6,10 @@ import { Home, CreateAutomation, Layout, Login, Settings, Unavailable } from './
 
 function App() {
   const { isPageUnsupported, loading } = useIsPageUnsupported();
+
+  useEffect(() => {
+    chrome.runtime.connect({ name: 'sidepanel-close-trigger-offloadit' });
+  }, []);
 
   if (loading) return;
 

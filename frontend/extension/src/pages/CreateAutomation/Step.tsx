@@ -2,12 +2,23 @@ import { useFormContext } from 'react-hook-form';
 import { Button, Textarea, Label, Card } from 'ui';
 import { TbTrash } from 'react-icons/tb';
 import type { TAutomationDetailsFormValues } from './CreateAutomation';
+import { getCurrentTab, injectScriptInCurrentTab, STORAGE_KEYS } from '../../utils';
+import { startDOMCapture } from '../../messaging/signals';
+import createSpotScriptPath from '../../content-scripts/createSpot?script';
 
 interface StepProps {
   index: number;
   onRemove: () => void;
   showRemove: boolean;
 }
+
+// Trigger the content script for DOM selection
+export const onSelectElement = async () => {
+  const currentTab = await getCurrentTab();
+  await injectScriptInCurrentTab(createSpotScriptPath);
+  startDOMCapture.emit({ tabId: currentTab?.id });
+  chrome.storage.local.set({ [STORAGE_KEYS.captureTabId]: currentTab?.id });
+};
 
 export const Step = ({ index, onRemove, showRemove }: StepProps) => {
   const {
@@ -22,9 +33,7 @@ export const Step = ({ index, onRemove, showRemove }: StepProps) => {
       <div className="flex justify-between items-center">
         <Label className="text-sm font-medium">Step {index + 1}</Label>
         {showRemove && (
-          <Button variant="ghost" size="sm" onClick={onRemove} className="hover:text-destructive">
-            <TbTrash className="h-4 w-4" />
-          </Button>
+          <TbTrash className="hover:text-destructive cursor-pointer" onClick={onRemove} />
         )}
       </div>
 
@@ -38,7 +47,12 @@ export const Step = ({ index, onRemove, showRemove }: StepProps) => {
         )}
       </div>
 
-      <Button type="button" variant="outline" size="sm" className="self-start">
+      <Button
+        size="sm"
+        type="button"
+        variant="outline"
+        className="self-start"
+        onClick={onSelectElement}>
         Select element
       </Button>
     </Card>
