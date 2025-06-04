@@ -1,6 +1,7 @@
 import { Outlet, useLocation, useNavigate } from 'react-router';
 import { NavBar } from '../components/NavBar';
 import { TbArrowBackUp } from 'react-icons/tb';
+import { Toaster } from 'ui';
 
 export const Layout = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export const Layout = () => {
           </div>
         )}
         <Outlet />
+        <Toaster />
       </div>
     </div>
   );

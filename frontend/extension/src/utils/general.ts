@@ -10,3 +10,11 @@ export const injectScriptInCurrentTab = async (script: string) => {
     files: [script],
   });
 };
+
+export const isPageUnsupported = async () => {
+  const tab = await getCurrentTab();
+
+  if (!tab || !tab.url) return true;
+
+  return tab.url.startsWith('chrome://') || tab.url.startsWith(`chrome-extension://`);
+};

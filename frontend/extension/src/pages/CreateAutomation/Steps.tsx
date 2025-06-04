@@ -1,5 +1,5 @@
-import { useFormContext, useFieldArray } from 'react-hook-form';
 import { Button } from 'ui';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 import { Step } from './Step';
 import type { TAutomationDetailsFormValues } from './CreateAutomation';
 
