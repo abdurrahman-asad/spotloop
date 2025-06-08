@@ -1,7 +1,7 @@
 import { emitStopDOMCapture_px } from '../messaging/proxies';
 import { startDOMCapture, stopDOMCapture } from '../messaging/signals';
-import { BLOCKED_EVENTS, HOVER_DEBOUNCE_DELAY, PRIMARY_COLOR } from './constants';
-import { blockEvents, debounce } from './utils';
+import { BLOCKED_EVENTS, HOVER_DEBOUNCE_DELAY, PRIMARY_COLOR } from '../constants';
+import { blockEvents, debounce, getXPath } from './utils';
 
 let isCaptureActive = false;
 let highlight: HTMLDivElement;
@@ -96,8 +96,9 @@ const cleanUp = () => {
 
 const onClick = (e: Event) => {
   blockEvents(e);
+  const XPath = getXPath(lastElement!);
   // stop capturing in call the contexts
-  emitStopDOMCapture_px();
+  emitStopDOMCapture_px(XPath);
 };
 
 const onIframeMouseLeave = debounce(hideHighlight, HOVER_DEBOUNCE_DELAY);

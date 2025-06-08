@@ -5,5 +5,6 @@ export * from './components/Textarea';
 export * from './components/Label';
 export * from './components/Card';
 export * from './components/toast';
+export * from './components/Tooltip';
 
 export * from './theme/ThemeProvider';

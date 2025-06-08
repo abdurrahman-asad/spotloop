@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getCurrentTab, injectScriptInCurrentTab, STORAGE_KEYS } from '../../utils';
 import { startDOMCapture, stopDOMCapture } from '../../messaging/signals';
 import createSpotScriptPath from '../../content-scripts/createSpot?script';
 
 export const useElementSelection = () => {
   const [isSelectingElement, setIsSelectingElement] = useState<boolean>(false);
+  const [XPath, setXPath] = useState<string>('');
 
   const selectElement = async () => {
+    setXPath('');
     setIsSelectingElement(true);
     const currentTab = await getCurrentTab();
     await injectScriptInCurrentTab(createSpotScriptPath);
@@ -21,7 +23,20 @@ export const useElementSelection = () => {
     await chrome.storage.local.remove(STORAGE_KEYS.captureTabId);
   };
 
+  useEffect(() => {
+    const handleStopCapture = (payload: { XPath: string }) => {
+      setXPath(payload.XPath);
+      setIsSelectingElement(false);
+    };
+    stopDOMCapture.subscribe(handleStopCapture);
+    return () => {
+      stopDOMCapture.unsubscribe();
+    };
+  }, []);
+
   return {
+    XPath,
+    setXPath,
     selectElement,
     cancelSelection,
     isSelectingElement,

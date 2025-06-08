@@ -6,7 +6,7 @@ import { createSignal } from './utils/signalFactory';
   DON'T FORGET TO UNSUBSCRIBE THE SIGNALS IN THE CONTENT SCRIPTS
 */
 
-export const stopDOMCapture = createSignal('STOP_DOM_CAPTURE');
+export const stopDOMCapture = createSignal<{ XPath: string }>('STOP_DOM_CAPTURE');
 
 export const startDOMCapture = createSignal('START_DOM_CAPTURE');
 

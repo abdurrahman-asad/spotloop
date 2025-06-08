@@ -1,40 +1,38 @@
 import { useFormContext } from 'react-hook-form';
-import { Button, Textarea, Label, Card, toast } from 'ui';
-import { TbTrash } from 'react-icons/tb';
+import { Button, Textarea, Label, Card, Tooltip, TooltipTrigger, TooltipContent } from 'ui';
+import { TbTrash, TbCheck } from 'react-icons/tb';
 import type { TAutomationDetailsFormValues } from './CreateAutomation';
-import { FullScreen } from '../../components/FullScreen';
-import { useElementSelection } from './useStepSelection';
-import { isPageUnsupported } from '../../utils';
 
 interface StepProps {
   index: number;
   onRemove: () => void;
   showRemove: boolean;
+  selectElement: (stepIndex: number) => Promise<void>;
 }
 
-export const Step = ({ index, onRemove, showRemove }: StepProps) => {
+export const Step = ({ index, onRemove, showRemove, selectElement }: StepProps) => {
   const {
     register,
+    getValues,
     formState: { errors },
   } = useFormContext<TAutomationDetailsFormValues>();
-  const { isSelectingElement, cancelSelection, selectElement } = useElementSelection();
 
   const stepError = errors.steps?.[index];
-
-  const handleElementSelection = async () => {
-    if (await isPageUnsupported()) {
-      toast.error('Element selection is not supported on default browser pages.');
-      return;
-    }
-    selectElement();
-  };
+  const isStepSelected = !!getValues(`steps.${index}.element`);
 
   return (
     <Card className="p-4">
       <div className="flex justify-between items-center">
         <Label className="text-sm font-medium">Step {index + 1}</Label>
         {showRemove && (
-          <TbTrash className="hover:text-destructive cursor-pointer" onClick={onRemove} />
+          <Tooltip>
+            <TooltipTrigger>
+              <TbTrash className="hover:text-destructive cursor-pointer" onClick={onRemove} />
+            </TooltipTrigger>
+            <TooltipContent side="left">
+              <p className="text-sm">Remove step</p>
+            </TooltipContent>
+          </Tooltip>
         )}
       </div>
 
@@ -48,22 +46,20 @@ export const Step = ({ index, onRemove, showRemove }: StepProps) => {
         )}
       </div>
 
-      {isSelectingElement && (
-        <FullScreen>
-          <p className="text-xl">Select an element on the page</p>
-          <Button size="sm" variant="outline" className="mt-8" onClick={cancelSelection}>
-            Cancel selection
-          </Button>
-        </FullScreen>
-      )}
-
       <Button
         size="sm"
         type="button"
         variant="outline"
         className="self-start"
-        onClick={handleElementSelection}>
-        Select element
+        disabled={isStepSelected}
+        onClick={() => selectElement(index)}>
+        {isStepSelected ? (
+          <>
+            Element selected <TbCheck />
+          </>
+        ) : (
+          'Select element'
+        )}
       </Button>
     </Card>
   );
