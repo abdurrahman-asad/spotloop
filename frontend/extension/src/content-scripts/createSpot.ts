@@ -97,8 +97,21 @@ const cleanUp = () => {
 const onClick = (e: Event) => {
   blockEvents(e);
   const XPath = getXPath(lastElement!);
+
+  const tagName = lastElement?.tagName.toLowerCase();
+  const attributes = Array.from(lastElement?.attributes || [])
+    .map(attr => `${attr.name}="${attr.value}"`)
+    .join(' ');
+  const tag = attributes ? `<${tagName} ${attributes}>` : `<${tagName}>`;
+
+  const payload = {
+    XPath,
+    tag,
+    isIframe: window !== window.parent,
+  };
+
   // stop capturing in call the contexts
-  emitStopDOMCapture_px(XPath);
+  emitStopDOMCapture_px(payload);
 };
 
 const onIframeMouseLeave = debounce(hideHighlight, HOVER_DEBOUNCE_DELAY);

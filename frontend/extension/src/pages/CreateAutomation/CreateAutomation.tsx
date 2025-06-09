@@ -26,7 +26,6 @@ const formSchema = z.object({
 });
 
 export type TAutomationDetailsFormValues = z.infer<typeof formSchema>;
-export type TStepFormValues = z.infer<typeof stepSchema>;
 
 export const CreateAutomation = () => {
   const methods = useForm<TAutomationDetailsFormValues>({

@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { getCurrentTab, injectScriptInCurrentTab, STORAGE_KEYS } from '../../utils';
 import { startDOMCapture, stopDOMCapture } from '../../messaging/signals';
 import createSpotScriptPath from '../../content-scripts/createSpot?script';
+import type { StopDOMCapturePayload } from '../../messaging/types';
 
 export const useElementSelection = () => {
   const [isSelectingElement, setIsSelectingElement] = useState<boolean>(false);
-  const [XPath, setXPath] = useState<string>('');
+  const [selectedElement, setSelectedElement] = useState<StopDOMCapturePayload>();
 
   const selectElement = async () => {
-    setXPath('');
+    setSelectedElement(undefined);
     setIsSelectingElement(true);
     const currentTab = await getCurrentTab();
     await injectScriptInCurrentTab(createSpotScriptPath);
@@ -24,8 +25,8 @@ export const useElementSelection = () => {
   };
 
   useEffect(() => {
-    const handleStopCapture = (payload: { XPath: string }) => {
-      setXPath(payload.XPath);
+    const handleStopCapture = (payload: StopDOMCapturePayload) => {
+      setSelectedElement(payload);
       setIsSelectingElement(false);
     };
     stopDOMCapture.subscribe(handleStopCapture);
@@ -35,10 +36,10 @@ export const useElementSelection = () => {
   }, []);
 
   return {
-    XPath,
-    setXPath,
     selectElement,
     cancelSelection,
+    selectedElement,
+    setSelectedElement,
     isSelectingElement,
   };
 };

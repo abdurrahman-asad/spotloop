@@ -10,8 +10,13 @@ import { isPageUnsupported } from '../../utils';
 export const Steps = () => {
   const { control, setValue } = useFormContext<TAutomationDetailsFormValues>();
   const [selectedStep, setSelectedStep] = useState<number>(0);
-  const { XPath, isSelectingElement, setXPath, cancelSelection, selectElement } =
-    useElementSelection();
+  const {
+    selectedElement,
+    isSelectingElement,
+    setSelectedElement,
+    cancelSelection,
+    selectElement,
+  } = useElementSelection();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -36,11 +41,11 @@ export const Steps = () => {
   };
 
   useEffect(() => {
-    if (XPath) {
-      setValue(`steps.${selectedStep}.element`, XPath);
-      setXPath('');
+    if (selectedElement?.XPath) {
+      setValue(`steps.${selectedStep}.element`, selectedElement.XPath);
+      setSelectedElement(undefined);
     }
-  }, [XPath, setValue, selectedStep, setXPath]);
+  }, [selectedElement?.XPath, setValue, selectedStep, setSelectedElement]);
 
   return (
     <div>
@@ -60,7 +65,7 @@ export const Steps = () => {
         ))}
       </div>
       <div className="mt-4">
-        <Button variant="default" onClick={addStep}>
+        <Button type="button" variant="default" onClick={addStep}>
           Add Step
         </Button>
       </div>
