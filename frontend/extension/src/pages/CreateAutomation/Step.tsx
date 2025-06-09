@@ -1,30 +1,38 @@
 import { useFormContext } from 'react-hook-form';
-import { Button, Textarea, Label, Card } from 'ui';
-import { TbTrash } from 'react-icons/tb';
+import { Button, Textarea, Label, Card, Tooltip, TooltipTrigger, TooltipContent } from 'ui';
+import { TbTrash, TbCheck } from 'react-icons/tb';
 import type { TAutomationDetailsFormValues } from './CreateAutomation';
 
 interface StepProps {
   index: number;
   onRemove: () => void;
   showRemove: boolean;
+  selectElement: (stepIndex: number) => Promise<void>;
 }
 
-export const Step = ({ index, onRemove, showRemove }: StepProps) => {
+export const Step = ({ index, onRemove, showRemove, selectElement }: StepProps) => {
   const {
     register,
+    getValues,
     formState: { errors },
   } = useFormContext<TAutomationDetailsFormValues>();
 
   const stepError = errors.steps?.[index];
+  const isStepSelected = !!getValues(`steps.${index}.element`);
 
   return (
     <Card className="p-4">
       <div className="flex justify-between items-center">
         <Label className="text-sm font-medium">Step {index + 1}</Label>
         {showRemove && (
-          <Button variant="ghost" size="sm" onClick={onRemove} className="hover:text-destructive">
-            <TbTrash className="h-4 w-4" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger>
+              <TbTrash className="hover:text-destructive cursor-pointer" onClick={onRemove} />
+            </TooltipTrigger>
+            <TooltipContent side="left">
+              <p className="text-sm">Remove step</p>
+            </TooltipContent>
+          </Tooltip>
         )}
       </div>
 
@@ -38,8 +46,20 @@ export const Step = ({ index, onRemove, showRemove }: StepProps) => {
         )}
       </div>
 
-      <Button type="button" variant="outline" size="sm" className="self-start">
-        Select element
+      <Button
+        size="sm"
+        type="button"
+        variant="outline"
+        className="self-start"
+        disabled={isStepSelected}
+        onClick={() => selectElement(index)}>
+        {isStepSelected ? (
+          <>
+            Element selected <TbCheck />
+          </>
+        ) : (
+          'Select element'
+        )}
       </Button>
     </Card>
   );

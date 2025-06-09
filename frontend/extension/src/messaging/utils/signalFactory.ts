@@ -1,6 +1,6 @@
 interface Signal<T = void> {
   emit: (params?: { tabId?: number; payload?: T }) => void;
-  subscribe: (callback: (payload?: T) => void) => void;
+  subscribe: (callback: (payload: T) => void) => void;
   unsubscribe: () => void;
 }
 
@@ -16,6 +16,7 @@ const emitToContent = <T>(message: T, tabId?: number): void => {
       });
     });
   }
+  chrome.runtime.sendMessage(message);
 };
 
 /**
@@ -28,7 +29,7 @@ const emitToContent = <T>(message: T, tabId?: number): void => {
 export const createSignal = <T = void>(signalName: string): Signal<T> => {
   let handler: ((msg: { signal: string; payload: T }) => void) | null = null;
 
-  const createHandler = (callback: (payload?: T) => void) => {
+  const createHandler = (callback: (payload: T) => void) => {
     return (msg: { signal: string; payload: T }) => {
       if (msg.signal === signalName) {
         callback(msg.payload);
@@ -41,7 +42,7 @@ export const createSignal = <T = void>(signalName: string): Signal<T> => {
       const { tabId, payload } = params ?? {};
       emitToContent({ signal: signalName, payload }, tabId);
     },
-    subscribe: (callback: (payload?: T) => void) => {
+    subscribe: (callback: (payload: T) => void) => {
       handler = createHandler(callback);
       chrome.runtime.onMessage.addListener(handler);
     },

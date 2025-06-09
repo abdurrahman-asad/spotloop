@@ -34,6 +34,30 @@ export const blockEvents = (e: Event) => {
   e.preventDefault();
 };
 
+export const getXPath = (el: Element): string => {
+  let path = '';
+  let current: Element | null = el;
+
+  while (current && current.nodeType === Node.ELEMENT_NODE) {
+    const tag = current.tagName.toLowerCase();
+
+    // Compute position among siblings with the same tag
+    let index = 1;
+    let sibling = current.previousElementSibling;
+    while (sibling) {
+      if (sibling.tagName === current.tagName) {
+        index++;
+      }
+      sibling = sibling.previousElementSibling;
+    }
+
+    path = `/${tag}[${index}]` + path;
+    current = current.parentElement;
+  }
+
+  return path;
+};
+
 // chrome.scripting.executeScript({
 //   target: { tabId: currentTab.id!, allFrames: true },
 //   func: () => {

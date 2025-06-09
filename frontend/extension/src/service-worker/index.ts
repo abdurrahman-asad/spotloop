@@ -1,11 +1,20 @@
 import { messageHandler } from '../messaging/utils/messageHandler';
 import createSpotScriptPath from '../content-scripts/createSpot?script';
 import { STORAGE_KEYS } from '../utils';
+import { stopDOMCapture } from '../messaging/signals';
 
 chrome.runtime.onMessage.addListener(messageHandler);
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+});
+
+chrome.runtime.onConnect.addListener(function (port) {
+  if (port.name === 'sidepanel-close-trigger-offloadit') {
+    port.onDisconnect.addListener(async () => {
+      stopDOMCapture.emit();
+    });
+  }
 });
 
 // remove the captureTabId when the tab is reloaded/navigated

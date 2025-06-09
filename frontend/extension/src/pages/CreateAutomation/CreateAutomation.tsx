@@ -26,7 +26,6 @@ const formSchema = z.object({
 });
 
 export type TAutomationDetailsFormValues = z.infer<typeof formSchema>;
-export type TStepFormValues = z.infer<typeof stepSchema>;
 
 export const CreateAutomation = () => {
   const methods = useForm<TAutomationDetailsFormValues>({
@@ -49,7 +48,7 @@ export const CreateAutomation = () => {
         <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4 flex-1">
           <AutomationDetails />
           <Steps />
-          <div className="mt-auto py-4">
+          <div className="mt-auto py-2">
             <Button type="submit" className="w-full">
               Create Automation
             </Button>

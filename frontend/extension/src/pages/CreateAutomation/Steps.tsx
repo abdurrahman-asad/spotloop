@@ -1,10 +1,22 @@
+import { Button, toast } from 'ui';
 import { useFormContext, useFieldArray } from 'react-hook-form';
-import { Button } from 'ui';
 import { Step } from './Step';
 import type { TAutomationDetailsFormValues } from './CreateAutomation';
+import { useElementSelection } from './useStepSelection';
+import { FullScreen } from '../../components/FullScreen';
+import { useEffect, useState } from 'react';
+import { isPageUnsupported } from '../../utils';
 
 export const Steps = () => {
-  const { control } = useFormContext<TAutomationDetailsFormValues>();
+  const { control, setValue } = useFormContext<TAutomationDetailsFormValues>();
+  const [selectedStep, setSelectedStep] = useState<number>(0);
+  const {
+    selectedElement,
+    isSelectingElement,
+    setSelectedElement,
+    cancelSelection,
+    selectElement,
+  } = useElementSelection();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -19,6 +31,22 @@ export const Steps = () => {
     remove(index);
   };
 
+  const handleElementSelection = async (index: number) => {
+    if (await isPageUnsupported()) {
+      toast.error('Element selection is not supported on default browser pages.');
+      return;
+    }
+    setSelectedStep(index);
+    selectElement();
+  };
+
+  useEffect(() => {
+    if (selectedElement?.XPath) {
+      setValue(`steps.${selectedStep}.element`, selectedElement.XPath);
+      setSelectedElement(undefined);
+    }
+  }, [selectedElement?.XPath, setValue, selectedStep, setSelectedElement]);
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -32,14 +60,24 @@ export const Steps = () => {
             index={index}
             onRemove={() => removeStep(index)}
             showRemove={fields.length > 1}
+            selectElement={handleElementSelection}
           />
         ))}
       </div>
       <div className="mt-4">
-        <Button variant="default" onClick={addStep}>
+        <Button type="button" variant="default" onClick={addStep}>
           Add Step
         </Button>
       </div>
+
+      {isSelectingElement && (
+        <FullScreen>
+          <p className="text-xl">Select an element on the page</p>
+          <Button size="sm" variant="outline" className="mt-8" onClick={cancelSelection}>
+            Cancel selection
+          </Button>
+        </FullScreen>
+      )}
     </div>
   );
 };
