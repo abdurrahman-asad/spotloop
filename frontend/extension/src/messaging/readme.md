@@ -4,7 +4,7 @@ The messaging module provides a robust system for communication between differen
 
 ## Signals
 
-Signals are used for one-way communication, typically for broadcasting events from serivce worker(or sidepanel) to content scripts. They follow a publish-subscribe pattern.
+Signals are used for broadcasting events from serivce worker(or sidepanel) to content scripts and across the internal pages. They follow a publish-subscribe pattern.
 
 ### Registering a Signal
 

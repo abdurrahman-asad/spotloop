@@ -1,14 +1,14 @@
 import { Button, toast } from 'ui';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { Step } from './Step';
-import type { TAutomationDetailsFormValues } from './CreateAutomation';
+import type { TAutomationFormValues } from './formSchema';
 import { useElementSelection } from './useStepSelection';
 import { FullScreen } from '../../components/FullScreen';
 import { useEffect, useState } from 'react';
 import { isPageUnsupported } from '../../utils';
 
 export const Steps = () => {
-  const { control, setValue } = useFormContext<TAutomationDetailsFormValues>();
+  const { control, setValue } = useFormContext<TAutomationFormValues>();
   const [selectedStep, setSelectedStep] = useState<number>(0);
   const {
     selectedElement,
@@ -24,7 +24,7 @@ export const Steps = () => {
   });
 
   const addStep = () => {
-    append({ id: crypto.randomUUID(), instructions: '', element: '' });
+    append({ id: crypto.randomUUID(), instructions: '', element: undefined, clickOnly: false });
   };
 
   const removeStep = (index: number) => {
@@ -42,10 +42,10 @@ export const Steps = () => {
 
   useEffect(() => {
     if (selectedElement?.XPath) {
-      setValue(`steps.${selectedStep}.element`, selectedElement.XPath);
+      setValue(`steps.${selectedStep}.element`, selectedElement);
       setSelectedElement(undefined);
     }
-  }, [selectedElement?.XPath, setValue, selectedStep, setSelectedElement]);
+  }, [selectedElement, setValue, selectedStep, setSelectedElement]);
 
   return (
     <div>

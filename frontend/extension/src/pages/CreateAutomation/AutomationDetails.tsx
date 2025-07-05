@@ -1,12 +1,12 @@
 import { useFormContext } from 'react-hook-form';
 import { Input, Textarea, Label } from 'ui';
-import type { TAutomationDetailsFormValues } from './CreateAutomation';
+import type { TAutomationFormValues } from './formSchema';
 
 export const AutomationDetails = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext<TAutomationDetailsFormValues>();
+  } = useFormContext<TAutomationFormValues>();
 
   return (
     <div className="flex flex-col">

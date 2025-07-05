@@ -1,7 +1,16 @@
 import { useFormContext } from 'react-hook-form';
-import { Button, Textarea, Label, Card, Tooltip, TooltipTrigger, TooltipContent } from 'ui';
+import {
+  Button,
+  Textarea,
+  Label,
+  Card,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  Checkbox,
+} from 'ui';
 import { TbTrash, TbCheck } from 'react-icons/tb';
-import type { TAutomationDetailsFormValues } from './CreateAutomation';
+import type { TAutomationFormValues } from './formSchema';
 
 interface StepProps {
   index: number;
@@ -12,13 +21,24 @@ interface StepProps {
 
 export const Step = ({ index, onRemove, showRemove, selectElement }: StepProps) => {
   const {
+    watch,
+    trigger,
     register,
     getValues,
+    setValue,
     formState: { errors },
-  } = useFormContext<TAutomationDetailsFormValues>();
+  } = useFormContext<TAutomationFormValues>();
 
   const stepError = errors.steps?.[index];
   const isStepSelected = !!getValues(`steps.${index}.element`);
+  const isClickOnly = watch(`steps.${index}.clickOnly`);
+
+  const handleClickOnlyChange = () => {
+    setValue(`steps.${index}.clickOnly`, !isClickOnly);
+    if (stepError?.instructions) {
+      trigger(`steps.${index}.instructions`);
+    }
+  };
 
   return (
     <Card className="p-4">
@@ -38,6 +58,7 @@ export const Step = ({ index, onRemove, showRemove, selectElement }: StepProps) 
 
       <div className="space-y-2">
         <Textarea
+          disabled={isClickOnly}
           placeholder="Enter step instructions"
           {...register(`steps.${index}.instructions`)}
         />
@@ -46,21 +67,34 @@ export const Step = ({ index, onRemove, showRemove, selectElement }: StepProps) 
         )}
       </div>
 
-      <Button
-        size="sm"
-        type="button"
-        variant="outline"
-        className="self-start"
-        disabled={isStepSelected}
-        onClick={() => selectElement(index)}>
-        {isStepSelected ? (
-          <>
-            Element selected <TbCheck />
-          </>
-        ) : (
-          'Select element'
-        )}
-      </Button>
+      <div className="flex items-center justify-between">
+        <Button
+          size="sm"
+          type="button"
+          variant="outline"
+          className="self-start"
+          disabled={isStepSelected}
+          onClick={() => selectElement(index)}>
+          {isStepSelected ? (
+            <>
+              Element selected <TbCheck />
+            </>
+          ) : (
+            'Select element'
+          )}
+        </Button>
+
+        <div className="flex items-center gap-2">
+          <Checkbox
+            checked={isClickOnly}
+            id="click-only-checkbox"
+            onCheckedChange={handleClickOnlyChange}
+          />
+          <Label htmlFor="click-only-checkbox" className="text-sm">
+            Click only
+          </Label>
+        </div>
+      </div>
     </Card>
   );
 };
