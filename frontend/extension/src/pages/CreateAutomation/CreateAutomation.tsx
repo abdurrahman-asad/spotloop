@@ -1,9 +1,11 @@
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from 'ui';
+import { Button, toast } from 'ui';
 import { AutomationDetails } from './AutomationDetails';
 import { Steps } from './Steps';
 import { automationFormSchema, type TAutomationFormValues } from './formSchema';
+import { STORAGE_KEYS } from '../../utils';
+import { useEffect } from 'react';
 
 export const CreateAutomation = () => {
   const methods = useForm<TAutomationFormValues>({
@@ -16,8 +18,28 @@ export const CreateAutomation = () => {
   });
 
   const onSubmit = (data: TAutomationFormValues) => {
-    console.log('Form submitted:', data);
+    chrome.storage.local.set({ [STORAGE_KEYS.automationData]: data });
+    toast.success('Automation created successfully!');
+    methods.reset();
   };
+
+  useEffect(() => {
+    const loadAutomationData = async () => {
+      try {
+        const result = await chrome.storage.local.get(STORAGE_KEYS.automationData);
+        const savedData = result[STORAGE_KEYS.automationData];
+
+        if (savedData) {
+          // Reset the form with the saved data
+          methods.reset(savedData);
+        }
+      } catch (error) {
+        console.error('Failed to load automation data from storage:', error);
+      }
+    };
+
+    loadAutomationData();
+  }, [methods]);
 
   return (
     <div className="flex flex-col h-full">
