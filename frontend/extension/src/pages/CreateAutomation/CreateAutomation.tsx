@@ -1,43 +1,21 @@
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button } from 'ui';
 import { AutomationDetails } from './AutomationDetails';
 import { Steps } from './Steps';
-
-const stepSchema = z.object({
-  id: z.string(),
-  instructions: z
-    .string()
-    .trim()
-    .min(1, 'Step instructions are required')
-    .max(500, 'Instructions must be at most 500 characters'),
-  element: z.string().optional(),
-});
-
-const formSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, 'Name is required')
-    .max(100, 'Name must be at most 100 characters'),
-  description: z.string().trim().max(500, 'Description must be at most 500 characters').optional(),
-  steps: z.array(stepSchema),
-});
-
-export type TAutomationDetailsFormValues = z.infer<typeof formSchema>;
+import { automationFormSchema, type TAutomationFormValues } from './formSchema';
 
 export const CreateAutomation = () => {
-  const methods = useForm<TAutomationDetailsFormValues>({
-    resolver: zodResolver(formSchema),
+  const methods = useForm<TAutomationFormValues>({
+    resolver: zodResolver(automationFormSchema),
     defaultValues: {
       name: '',
       description: '',
-      steps: [{ id: crypto.randomUUID(), instructions: '', element: '' }],
+      steps: [{ id: crypto.randomUUID(), instructions: '', element: undefined, clickOnly: false }],
     },
   });
 
-  const onSubmit = (data: TAutomationDetailsFormValues) => {
+  const onSubmit = (data: TAutomationFormValues) => {
     console.log('Form submitted:', data);
   };
 
