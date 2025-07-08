@@ -12,10 +12,14 @@ import {
 import { TbExternalLink } from 'react-icons/tb';
 import { STORAGE_KEYS } from '../utils';
 import type { TAutomationFormValues } from './CreateAutomation/formSchema';
+import { useStore } from '../store';
+import { useNavigate } from 'react-router';
 
 export const Home = () => {
   const [automations, setAutomations] = useState<TAutomationFormValues[]>([]);
   const [loading, setLoading] = useState(true);
+  const { dispatch } = useStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadAutomations = async () => {
@@ -39,9 +43,12 @@ export const Home = () => {
     loadAutomations();
   }, []);
 
-  const handleEdit = (automation: TAutomationFormValues, index: number) => {
-    console.log('Edit automation:', automation, index);
-    // TODO: Navigate to edit page or open edit modal
+  const handleEdit = (automation: TAutomationFormValues) => {
+    dispatch({
+      type: 'SET_CURRENT_AUTOMATION',
+      payload: automation,
+    });
+    navigate('/create-automation?edit=true');
   };
 
   const handlePreview = (automation: TAutomationFormValues, index: number) => {
@@ -87,7 +94,7 @@ export const Home = () => {
                         <TbExternalLink
                           size={20}
                           className="hover:opacity-80 cursor-pointer"
-                          onClick={() => handleEdit(automation, index)}
+                          onClick={() => handleEdit(automation)}
                         />
                       </TooltipTrigger>
                       <TooltipContent side="top">
@@ -100,14 +107,14 @@ export const Home = () => {
                         size="sm"
                         variant="outline"
                         className="mr-2"
-                        onClick={() => handleEdit(automation, index)}>
-                        Edit steps
+                        onClick={() => handleEdit(automation)}>
+                        Edit
                       </Button>
                       <Button
                         size="sm"
                         variant="default"
                         onClick={() => handlePreview(automation, index)}>
-                        Preview
+                        Run
                       </Button>
                     </div>
                   </div>
