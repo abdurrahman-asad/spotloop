@@ -40,3 +40,9 @@ export const automationFormSchema = z.object({
 });
 
 export type TAutomationFormValues = z.infer<typeof automationFormSchema>;
+
+export const defaultValues = {
+  name: '',
+  description: '',
+  steps: [{ id: crypto.randomUUID(), instructions: '', element: undefined, clickOnly: false }],
+};
