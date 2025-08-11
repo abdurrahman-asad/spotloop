@@ -9,6 +9,7 @@ const elementSchema = z.object({
 const withInstructionsSchema = z.object({
   id: z.string(),
   clickOnly: z.literal(false),
+  url: z.string(),
   instructions: z
     .string()
     .trim()
@@ -20,6 +21,7 @@ const withInstructionsSchema = z.object({
 const withoutInstructionsSchema = z.object({
   id: z.string(),
   clickOnly: z.literal(true),
+  url: z.string(),
   instructions: z.string().optional(),
   element: elementSchema.optional(),
 });

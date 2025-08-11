@@ -87,10 +87,10 @@ export const Step = ({ index, onRemove, showRemove, selectElement }: StepProps) 
         <div className="flex items-center gap-2">
           <Checkbox
             checked={isClickOnly}
-            id="click-only-checkbox"
+            id={`click-only-checkbox-${index}`}
             onCheckedChange={handleClickOnlyChange}
           />
-          <Label htmlFor="click-only-checkbox" className="text-sm">
+          <Label htmlFor={`click-only-checkbox-${index}`} className="text-sm cursor-pointer">
             Click only
           </Label>
         </div>

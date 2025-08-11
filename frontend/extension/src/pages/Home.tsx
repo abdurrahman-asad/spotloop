@@ -10,10 +10,11 @@ import {
   TooltipTrigger,
 } from 'ui';
 import { TbExternalLink } from 'react-icons/tb';
-import { STORAGE_KEYS } from '../utils';
+import { injectScriptInTab, STORAGE_KEYS } from '../utils';
 import type { TAutomationFormValues } from './CreateAutomation/formSchema';
 import { useStore } from '../store';
 import { useNavigate } from 'react-router';
+import runnerScript from '../content-scripts/runner?script';
 
 export const Home = () => {
   const [automations, setAutomations] = useState<TAutomationFormValues[]>([]);
@@ -51,9 +52,16 @@ export const Home = () => {
     navigate('/create-automation?edit=true');
   };
 
-  const handlePreview = (automation: TAutomationFormValues, index: number) => {
-    console.log('Preview automation:', automation, index);
-    // TODO: Open preview modal or navigate to preview page
+  const runAutomation = async (automation: TAutomationFormValues) => {
+    await chrome.storage.local.set({
+      [STORAGE_KEYS.currentAutomation]: automation,
+    });
+    await chrome.storage.local.set({
+      [STORAGE_KEYS.currentStep]: 0,
+    });
+    const startingUrl = automation.steps[0].url;
+    const newTab = await chrome.tabs.create({ url: startingUrl });
+    injectScriptInTab(runnerScript, newTab.id!);
   };
 
   if (loading) {
@@ -110,10 +118,7 @@ export const Home = () => {
                         onClick={() => handleEdit(automation)}>
                         Edit
                       </Button>
-                      <Button
-                        size="sm"
-                        variant="default"
-                        onClick={() => handlePreview(automation, index)}>
+                      <Button size="sm" variant="default" onClick={() => runAutomation(automation)}>
                         Run
                       </Button>
                     </div>
