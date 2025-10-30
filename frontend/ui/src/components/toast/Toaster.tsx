@@ -3,7 +3,7 @@ import RHToast, { Toaster as RHToaster } from 'react-hot-toast';
 export const Toaster = () => {
   return (
     <RHToaster
-      position="bottom-right"
+      position="bottom-center"
       toastOptions={{
         duration: 2000,
         style: {

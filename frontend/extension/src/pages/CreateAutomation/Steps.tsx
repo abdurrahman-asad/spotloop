@@ -5,7 +5,7 @@ import type { TAutomationFormValues } from './formSchema';
 import { useElementSelection } from './useStepSelection';
 import { FullScreen } from '../../components/FullScreen';
 import { useEffect, useState } from 'react';
-import { isPageUnsupported } from '../../utils';
+import { isPageUnsupported, getCurrentTab } from '../../utils';
 
 export const Steps = () => {
   const { control, setValue } = useFormContext<TAutomationFormValues>();
@@ -23,8 +23,15 @@ export const Steps = () => {
     name: 'steps',
   });
 
-  const addStep = () => {
-    append({ id: crypto.randomUUID(), instructions: '', element: undefined, clickOnly: false });
+  const addStep = async () => {
+    const currentTab = await getCurrentTab();
+    append({
+      id: crypto.randomUUID(),
+      instructions: '',
+      element: undefined,
+      clickOnly: false,
+      url: currentTab!.url!, // it'll always be defined since this is called after the tab is fetched
+    });
   };
 
   const removeStep = (index: number) => {
@@ -42,7 +49,9 @@ export const Steps = () => {
 
   useEffect(() => {
     if (selectedElement?.XPath) {
-      setValue(`steps.${selectedStep}.element`, selectedElement);
+      const { url, ...element } = selectedElement;
+      setValue(`steps.${selectedStep}.element`, element);
+      setValue(`steps.${selectedStep}.url`, url);
       setSelectedElement(undefined);
     }
   }, [selectedElement, setValue, selectedStep, setSelectedElement]);

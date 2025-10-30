@@ -1,7 +1,7 @@
 import { emitStopDOMCapture_px } from '../messaging/proxies';
 import { startDOMCapture, stopDOMCapture } from '../messaging/signals';
-import { BLOCKED_EVENTS, HOVER_DEBOUNCE_DELAY, PRIMARY_COLOR } from '../constants';
-import { blockEvents, debounce, getXPath } from './utils';
+import { BLOCKED_EVENTS, HOVER_DEBOUNCE_DELAY } from '../constants';
+import { blockEvents, debounce, getXPath, injectHighlight } from './utils';
 
 let isCaptureActive = false;
 let highlight: HTMLDivElement;
@@ -18,20 +18,6 @@ const renderHighlight = (rect: DOMRect) => {
 
 const hideHighlight = () => {
   highlight.style.opacity = '0';
-};
-
-const injectHighlight = () => {
-  const highlight = document.createElement('div');
-  highlight.style.position = 'absolute';
-  highlight.style.borderRadius = '0.25rem';
-  highlight.style.border = `2px solid ${PRIMARY_COLOR}`;
-  highlight.style.backgroundColor = `oklch(0.93 0.0173 176.53 / 0.2)`;
-  highlight.style.pointerEvents = 'none';
-  highlight.style.zIndex = '2147483647';
-  highlight.style.transition = 'all 0.2s ease';
-  highlight.style.cursor = 'pointer';
-  document.body.appendChild(highlight);
-  return highlight;
 };
 
 const handleHover = (e: Event) => {
@@ -108,6 +94,7 @@ const onClick = (e: Event) => {
     XPath,
     tag,
     isIframe: window !== window.parent,
+    url: window.location.href,
   };
 
   // stop capturing in call the contexts

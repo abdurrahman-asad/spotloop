@@ -1,5 +1,7 @@
 // import { BLOCKED_EVENTS, IGNORED_TAGS } from './constants';
 
+import { PRIMARY_COLOR } from '../constants';
+
 export const debounce = <T extends (...args: any[]) => void>(
   func: T,
   delay: number,
@@ -56,6 +58,20 @@ export const getXPath = (el: Element): string => {
   }
 
   return path;
+};
+
+export const injectHighlight = () => {
+  const highlight = document.createElement('div');
+  highlight.style.position = 'absolute';
+  highlight.style.borderRadius = '0.25rem';
+  highlight.style.border = `2px solid ${PRIMARY_COLOR}`;
+  highlight.style.backgroundColor = `oklch(0.93 0.0173 176.53 / 0.2)`;
+  highlight.style.pointerEvents = 'none';
+  highlight.style.zIndex = '2147483647';
+  highlight.style.transition = 'all 0.2s ease';
+  highlight.style.cursor = 'pointer';
+  document.body.appendChild(highlight);
+  return highlight;
 };
 
 // chrome.scripting.executeScript({
