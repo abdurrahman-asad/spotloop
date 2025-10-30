@@ -5,8 +5,15 @@ export const getCurrentTab = async () => {
 
 export const injectScriptInCurrentTab = async (script: string) => {
   const currentTab = await getCurrentTab();
-  await chrome.scripting.executeScript<any[], boolean>({
+  return chrome.scripting.executeScript<any[], boolean>({
     target: { tabId: currentTab.id!, allFrames: true },
+    files: [script],
+  });
+};
+
+export const injectScriptInTab = async (script: string, tabID: number) => {
+  return chrome.scripting.executeScript<any[], boolean>({
+    target: { tabId: tabID, allFrames: true },
     files: [script],
   });
 };

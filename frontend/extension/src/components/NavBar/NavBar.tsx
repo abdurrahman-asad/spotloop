@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from 'ui';
-import { TbMenu3, TbRoute } from 'react-icons/tb';
+import { TbMenu3, TbRoute, TbSettings } from 'react-icons/tb';
 import { Link } from 'react-router';
 import { ThemeToggle } from '../ThemeToggle';
 // import { onCreateSpot } from './menuActions';
@@ -24,9 +24,11 @@ function Menu() {
             <TbRoute className="text-foreground" /> Create automation
           </DropdownMenuItem>
         </Link>
-        <DropdownMenuItem>Overview</DropdownMenuItem>
         <Link to="/settings">
-          <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            <TbSettings className="text-foreground" />
+            Settings
+          </DropdownMenuItem>
         </Link>
       </DropdownMenuContent>
     </DropdownMenu>
